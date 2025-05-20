@@ -1,8 +1,10 @@
 package main
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"log"
+	"os"
 )
 
 func main() {
@@ -16,7 +18,13 @@ func main() {
 		})
 	})
 
-	if err := router.Run(":80"); err != nil {
+	port := os.Getenv("PORT")
+
+	if port == "" {
+		port = "8080"
+	}
+
+	if err := router.Run(fmt.Sprintf(":%s", port)); err != nil {
 		log.Fatalf("error: %s\n", err.Error())
 	}
 }
