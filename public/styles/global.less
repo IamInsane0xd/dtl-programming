@@ -60,4 +60,26 @@ html, body, #container {
       flex: 1 0 auto;
     }
   }
+
+  #content {
+    h2 {
+      text-align: center;
+      margin: 50px 20px 20px;
+
+      &:first-child {
+        margin: 20px;
+      }
+    }
+
+    pre {
+      background-color: @text-color;
+      color: @background-color;
+      padding: 0 10px;
+
+      code {
+        font-family: monospace;
+        color: @background-color;
+      }
+    }
+  }
 }

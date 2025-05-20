@@ -16,6 +16,270 @@
 			</div>
 			<h2>C#</h2>
 		</nav>
+		<div id="content">
+			<h2>Fajl beolvasasa</h2>
+			<pre>
+				<code>
+FileStream fs = new FileStream(&quot;file.txt&quot;, FileMode.Open);
+StreamReader sr = new StreamReader(fs);
+List&lt;Class&gt; list = new List&lt;Class&gt;();
+
+while (!sr.EndOfStream)
+{
+  string line = sr.ReadLine();
+  string[] data = line.Split(&apos;,&apos;);
+  Class d = new Class();
+
+  d.property1 = data[0];
+  d.property2 = int.Parse(data[1]);
+
+  list.Add(obj);
+}
+
+sr.Close();
+fs.Close();</code>
+			</pre>
+
+			<h2>Fajlba iras</h2>
+			<pre>
+				<code>
+FileStream fs = new FileStream(&quot;asd.txt&quot;, FileMode.Create);
+StreamWriter sw = new StreamWriter(fs);
+
+for (int i = 0; i &lt; list.Count; i++)
+{
+  sw.WriteLine($&quot;{list[0].property1};{list[0].property2}&quot;);
+}
+
+sw.Close();
+fs.Close();</code>
+			</pre>
+
+			<h2>Dictionary</h2>
+			<pre>
+				<code>
+Dictionary&lt;string, int&gt; dict = new Dictionary&lt;string, int&gt;();
+
+for (int i = 0; i &lt; list.Count; i++)
+{
+  if (!dict.ContainsKey(list[i]))
+  {
+    dict.Add(list[i], 1);
+  }
+  else
+  {
+    dict[list[i]] = 1;
+  }
+}
+
+foreach (var item in dict)
+{
+  Console.WriteLine($&quot;{item.Key} - {item.Value}&quot;);
+}</code>
+			</pre>
+
+			<h2>WPF OpenFileDialog</h2>
+			<pre>
+				<code>
+private List&lt;Class&gt; list = new List&lt;Class&gt;();
+
+public MainWindow()
+{
+  OpenFileDialog open = new OpenFileDialog();
+
+  open.Filter = &quot;Excel (.csv)|*.csv|Szoveges fajl (.txt)|*.txt&quot;;
+  open.Title = &quot;Valassz ki egy fajlt!&quot;;
+
+  if (open.ShowDialog() == true)
+  {
+    string utvonal = open.FileName;
+    FileStream fs = new FileStream(utvonal, FileMode.Open);
+    StreamReader sr = new StreamReader(fs);
+
+    list.Clear();
+
+    while (!sr.EndOfStream)
+    {
+      string line = sr.ReadLine();
+      string[] data = line.Split(&apos;,&apos;);
+      Class d = new Class();
+
+      d.property1 = data[0];
+      d.property2 = int.Parse(data[1]);
+
+      list.Add(obj);
+    }
+
+    sr.Close();
+    fs.Close();
+  }
+  else
+  {
+    MessageBox.Show(&quot;Nem sikerult megnyitni a fajlt!&quot;, &quot;Hiba&quot;, MessageBoxButton.OK, MessageBoxImage.Error);
+    Application.Current.Shutdown();
+  }
+  InitializeComponent();
+}</code>
+			</pre>
+
+			<h2>WPF SaveFileDialog</h2>
+			<pre>
+				<code>
+private void Ment(object sender, RoutedEventArgs e)
+{
+  SaveFileDialog save = new SaveFileDialog();
+
+  save.Title = &quot;Mentes Maskent&quot;;
+  save.Filter = &quot;Szoveges fajl (*.txt)|*.txt|CSV fajl (*.csv)|*.csv&quot;;
+
+  if (save.ShowDialog() == true)
+  {
+    string utvonal = save.FileName;
+    FileStream fs = new FileStream(&quot;asd.txt&quot;, FileMode.Create);
+    StreamWriter sw = new StreamWriter(fs);
+
+    sw.WriteLine(&quot;Hello, World!&quot;);
+
+    sw.Close();
+    fs.Close();
+  }
+  else
+  {
+    MessageBox.Show(&quot;Nem sikerult elmenteni a fajlt.&quot;, &quot;Hiba!&quot;, MessageBoxButton.OK, MessageBoxImage.Error);
+  }
+}</code>
+			</pre>
+
+			<h2>WPF MessageBox</h2>
+			<pre>
+				<code>
+MessageBox.Show(&quot;Szoveg&quot;, &quot;Cim&quot;, MessageBoxButton.OK, MessageBoxImage.Information);</code>
+			</pre>
+
+			<h2>SQL osszekotese a C#-al</h2>
+			<pre>
+
+Eloszor az SQL DLL-t (mysql.data.dll) kell a projektbe importalni. Ezt a kovetkezo modon lehetseges:
+
+View -> Solution Explorer -> References (jobb klikk) -> Add Reference -> Browse -> mysql.data.dll -> Add ->
+Reference Manager-en belul ki kell pipalni -> Ok
+
+Ez utan a Program.cs file-ba importalni kell:
+				<code>
+using MySql.Data.MySqlClient;
+				</code>
+
+Az adatbazishoz valo kapcsolatert egy erre hasznalhato osztalyt kell letrehozni:
+				<code>
+class DbConnect
+{
+  private MySqlConnection con;
+
+  public DbConnect(string host, string dbname, string ui, string pw)
+  {
+    con = new MySqlConnection(
+      $&quot;Database = {dbname};&quot; +
+      $&quot;Data Source = {host};&quot; +
+      $&quot;User Id = {ui};&quot; +
+      $&quot;Password = {pw};&quot;
+    );
+  }
+}
+				</code>
+A kapcsolat letrehozasahoz a kovetkezo metodust kell letrehozni az osztalyban:
+				<code>
+private bool Connect()
+{
+  try
+  {
+    con.Open();
+    return true;
+  }
+  catch (Exception)
+  {
+    return false;
+  }
+}
+				</code>
+A kapcsolat bontasahoz pedig a kovetkezot:
+				<code>
+private bool Close()
+{
+  try
+  {
+    con.Close();
+    return true;
+  }
+  catch (Exception)
+  {
+    return false;
+  }
+}
+				</code>
+A kovetkezo metodust kell letrehozni, hogy tudjunk eredment nelkuli parancsokat (pl: INSERT INTO) futtatni az adatbazison:
+				<code>
+public void InsertData(Class osztaly)
+{
+  if (Connect())
+  {
+    string query = $&quot;INSERT INTO teszttabla (nev, kor) VALUES (@nev, @kor);&quot;;
+    MySqlCommand cmd = new MySqlCommand(query, con);
+
+    cmd.Parameters.AddWithValue(&quot;@nev&quot;, osztaly.nev);
+    cmd.Parameters.AddWithValue(&quot;@kor&quot;, osztaly.kor);
+    cmd.ExecuteNonQuery();
+
+    Close();
+  }
+}
+				</code>
+Olyan kerest, amiknek van eredmenye (pl: SELECT) a kovetkezo metodussal lehet kuldeni:
+				<code>
+public List&lt;Class&gt; SelectAll()
+{
+  List&lt;Class&gt; adatok = [];
+
+  if (Connect())
+  {
+    string query = &quot;SELECT * FROM teszttabla&quot;;
+    MySqlCommand cmd = new MySqlCommand(query, con);
+    MySqlDataReader reader = cmd.ExecuteReader();
+
+    while (reader.Read())
+    {
+      Class osztaly;
+
+      osztaly.kor = reader.GetInt32(0);
+      osztaly.atlag = reader.GetInt32(1);
+
+      adatok.Add(osztaly);
+    }
+
+    Close();
+  }
+
+  return adatok;
+}
+				</code>
+Ezt a letrehozott osztalyt a kovetkezo modon kell hasznalni:
+				<code>
+DBConnect db = new DBConnect(&quot;127.0.0.1&quot;, &quot;teszt&quot;, &quot;root&quot;, &quot;&quot;);
+
+db.InsertData(new Class(&quot;Jonas&quot;, 18));
+
+List&lt;Class&gt; osszesAdat = db.Selectall();</code>
+			</pre>
+
+			<h2>Veletlen szam generalas</h2>
+			<pre>
+				<code>
+Random rnd = new Random();
+int szam = rnd.Next(5, 15);
+				</code>
+Itt alra kell meg nagyon figyalni, hogy a kisebb szam az benne lehet a generaltak kozott, viszont a nagyobb az nem.
+Tehat a fenti peldaban a szam az az 5-14 skalan lesz valahol.
+			</pre>
+		</div>
 	</div>
 </body>
 </html>
