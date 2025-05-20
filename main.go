@@ -1,11 +1,10 @@
-package DTLProgramming
+package main
 
 import (
 	"github.com/gin-gonic/gin"
 	"log"
 )
 
-//goland:noinspection GoUnusedFunction
 func main() {
 	router := gin.Default()
 
