@@ -1,32 +1,8 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  color: #303036ff;
-  font-family: Arial, Helvetica, sans-serif;
-}
-a {
-  color: #4b88a2ff;
-  text-decoration: none;
-}
-a:hover {
-  color: #3b6b7f;
-}
-a:active {
-  color: #4b88a2ff;
-}
-html,
-body,
-#container {
-  height: 100%;
-  width: 100%;
-}
 #container {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: #e7ecefff;
 }
 #container #title-text,
 #container #main-nav {
