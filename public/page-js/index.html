@@ -16,6 +16,158 @@
 			</div>
 			<h2>JS</h2>
 		</nav>
+		<div id="content">
+			<h2>Frontend - GET fetch</h2>
+			<pre>
+				<code>
+const getFetch = (url) =&gt; {
+  return new Promise((resolve, reject) =&gt; {
+    fetch(url)
+      .then((res) =&gt; {
+        if (!res.ok) {
+          reject(&grave;Hiba: ${res.status}&grave;)
+        }
+        return res.json()
+      })
+      .then((data) =&gt; {
+        resolve(data)
+      })
+      .catch((error) =&gt; {
+        reject(&grave;Hiba: ${error}&grave;)
+      })
+  })
+}</code>
+			</pre>
+
+			<h2>Frontend - POST fetch</h2>
+			<pre>
+				<code>
+const postFetch = (url, postBody) =&gt; {
+  return new Promise((resolve, reject) =&gt; {
+    fetch(url, {
+      method: &apos;POST&apos;,
+      headers: { &apos;Content-Type&apos;: &apos;application/json&apos; },
+      body: JSON.stringify(postBody),
+    })
+      .then((res) =&gt; {
+        if (!res.ok) {
+          reject(&grave;Hiba: ${res.status}&grave;)
+        }
+        return res.json()
+      })
+      .then((data) =&gt; {
+        resolve(data)
+      })
+      .catch((error) =&gt; {
+        reject(&grave;Hiba: ${error}&grave;)
+      })
+  })
+}</code>
+			</pre>
+
+			<h2>Frontend - POST fetch FormData</h2>
+			<pre>
+				<code>
+const postFetchForm = (url, formData) =&gt; {
+  return new Promise((resolve, reject) =&gt; {
+    fetch(url, { method: &apos;POST&apos;, body: formData })
+      .then((res) =&gt; {
+        if (!res.ok) {
+          reject(&grave;Hiba: ${res.status}&grave;)
+        }
+        return res.json()
+      })
+      .then((data) =&gt; {
+        resolve(data)
+      })
+      .catch((error) =&gt; {
+        reject(&grave;Hiba: ${error}&grave;)
+      })
+  })
+}</code>
+			</pre>
+
+			<h2>Frontend - file kuldese a backendre</h2>
+			<pre>
+				<code>
+const formData = FormData(document.getElementById(&apos;formFile&apos;))
+const fileInput = document.getElementById(&apos;fileInput2&apos;)
+
+if (fileInput &amp;&amp; fileInput.files.length &gt; 0) {
+  formData.append(&apos;file&apos;, fileInput.files[0])
+  try {
+    const response = await postFetchForm(&apos;/api/postFile&apos;, formData)
+    console.log(&apos;File uploaded successfully:&apos;, response)
+  } catch (error) {
+    console.error(&apos;Error uploading file:&apos;, error)
+  }
+} else {
+  console.log(&apos;No file selected&apos;)
+}</code>
+			</pre>
+
+			<h2>Backend - GET api vegpont</h2>
+			<pre>
+				<code>
+app.get(&apos;/api/pelda/:id&apos;, (req, res) =&gt; {
+  const id = req.params.id;
+  res.status(200).json({ message: &apos;hello world &apos; + id });
+})</code>
+			</pre>
+
+			<h2>Backend - POST api vegpont</h2>
+			<pre>
+				<code>
+app.post(&apos;/api/postpelda&apos;, (req, res) =&gt; {
+  const postBody = req.body;
+  res.status(200).json({ message: &apos;Hello World&apos; + postBody.id });
+})</code>
+			</pre>
+
+			<h2>Backend - POST api vegpont - FormData alap keres</h2>
+			<pre>
+				<code>
+app.post(&apos;/api/update/versenyzok&apos;, upload.single(&apos;file&apos;), async (req, res) =&gt; {
+    const body = req.body;
+    res.status(200).json({&apos;message&apos;: body.name});
+  }
+)</code>
+			</pre>
+
+			<h2>Backend - POST api vegpont - FormData file keres</h2>
+			<pre>
+				<code>
+app.post(&apos;/api/postFile&apos;, upload.single(&apos;fileInput&apos;), (req, res) =&gt; {
+  if (!req.file) {
+    res.status(500).json({ message: &apos;Nem t&ouml;lt&ouml;tt fel f&aacute;jlt!&apos; })
+  } else {
+    res.status(200)
+      .json({
+        message: &apos;/api/postFormData k&eacute;sz.&apos;,
+        formDataBody: req.body,
+        file: req.file,
+      })
+  }
+});</code>
+			</pre>
+
+			<h2>Backend - dbqueries pelda kereshez, aminek nincs eredmenye (pl INSERT INTO)</h2>
+			<pre>
+				<code>
+function insertInto(nev, kor) {
+  return new Promise((resolve, reject) =&gt; {
+    pool.query(&quot;INSERT INTO nev_kor (nev, kor) VALUES (?, ?)&quot;, [nev, kor], (error, results) =&gt; {
+      if (error) {
+        console.error(&quot;Error inserting data: &quot;, error);
+        reject(error);
+      } else {
+        resolve(results);
+      }
+    });
+  });
+}</code>
+			</pre>
+		</div>
 	</div>
 </body>
 </html>
