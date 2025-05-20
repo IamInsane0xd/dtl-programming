@@ -2,7 +2,6 @@ package DTLProgramming
 
 import (
 	"fmt"
-	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	"log"
 	"os"
@@ -26,9 +25,9 @@ func main() {
 		log.Fatalf("error: %s\n", err.Error())
 	}
 
-	router := gin.Default()
-
-	api := router.Group("/api")
-
-	apiAuth := api.Group("/auth")
+	// router := gin.Default()
+	//
+	// api := router.Group("/api")
+	//
+	// apiAuth := api.Group("/auth")
 }
