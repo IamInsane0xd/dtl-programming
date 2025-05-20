@@ -16,7 +16,7 @@ func main() {
 		})
 	})
 
-	if err := router.Run(":8080"); err != nil {
+	if err := router.Run(":80"); err != nil {
 		log.Fatalf("error: %s\n", err.Error())
 	}
 }
