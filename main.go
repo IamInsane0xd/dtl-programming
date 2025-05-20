@@ -2,6 +2,7 @@ package DTLProgramming
 
 import (
 	"github.com/gin-gonic/gin"
+	"log"
 )
 
 //goland:noinspection GoUnusedFunction
@@ -15,4 +16,8 @@ func main() {
 			"message": "Hello World",
 		})
 	})
+
+	if err := router.Run(":8080"); err != nil {
+		log.Fatalf("error: %s\n", err.Error())
+	}
 }
