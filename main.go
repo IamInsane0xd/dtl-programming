@@ -14,7 +14,7 @@ func main() {
 	// ---
 
 	// --- pages ---
-	router.Use(staticServePage("/", "./public"))
+	router.Use(staticServePage("/", "./public/page-home"))
 	router.Use(staticServePage("/sql", "./public/page-sql"))
 	router.Use(staticServePage("/js", "./public/page-js"))
 	router.Use(staticServePage("/cs", "./public/page-cs"))
